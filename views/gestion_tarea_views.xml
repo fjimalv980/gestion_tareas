@@ -1,0 +1,84 @@
+<odoo>
+    <!-- Vista de Formulario -->
+    <record id="view_gestion_tarea_form" model="ir.ui.view">
+        <field name="name">gestion.tarea.form</field>
+        <field name="model">gestion.tarea</field>
+        <field name="arch" type="xml">
+            <form string="Tarea">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="assigned_to"/>
+                        <field name="deadline"/>
+                        <field name="priority"/>
+                        <field name="state"/>
+                    </group>
+                    <group>
+                        <field name="description" widget="text"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <!-- Vista Kanban -->
+    <record id="view_gestion_tarea_kanban" model="ir.ui.view">
+        <field name="name">gestion.tarea.kanban</field>
+        <field name="model">gestion.tarea</field>
+        <field name="arch" type="xml">
+            <kanban>
+                <field name="name"/>
+                <field name="assigned_to"/>
+                <field name="deadline"/>
+                <field name="priority"/>
+                <field name="state"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="o_kanban_record">
+                            <div>
+                                <strong><span t-esc="record.name.value"/></strong>
+                            </div>
+                            <div>
+                                <span t-esc="record.state.value"/>
+                            </div>
+                            <div>
+                                <span t-esc="record.priority.value"/>
+                            </div>
+                            <div>
+                                <!-- Mostrar el nombre del empleado asignado -->
+                                <span t-esc="record.assigned_to.value or 'No Asignado'"/>
+                            </div>
+                            <div>
+                                <span t-esc="record.deadline.value or 'Sin Fecha'"/>
+                            </div>
+                            <div>
+                                <!-- Botón para eliminar el registro -->
+                                <button name="unlink" type="object" class="btn btn-danger"
+                                    string="Eliminar"/>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+    <!-- Acción para abrir las vistas -->
+    <record id="action_gestion_tareas" model="ir.actions.act_window">
+        <field name="name">Gestión de Tareas</field>
+        <field name="res_model">gestion.tarea</field>
+        <field name="view_mode">kanban,form</field>
+        <field name="help" type="html">
+            <p>
+                Crea y organiza tareas asignadas a empleados.
+            </p>
+        </field>
+    </record>
+    <!-- Menú en la raíz -->
+    <menuitem id="menu_gestion_tareas_module_root"
+        name="Gestión de Tareas"
+        sequence="10"/>
+    <menuitem id="menu_gestion_tareas_module"
+        name="Tareas"
+        parent="menu_gestion_tareas_module_root"
+        action="action_gestion_tareas"
+        sequence="10"/>
+</odoo>
